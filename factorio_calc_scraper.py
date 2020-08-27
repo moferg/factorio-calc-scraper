@@ -25,7 +25,38 @@
 
 # In the future, this script will be able to handle different levels of assembly machines and rates, but for now it will focus on the defaults
 
+# Imports
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
+import time
+
+print("Welcome to the Facotrio Calc Scraper!")
+time.sleep(1)
+print("This script will scrape the site of the Factorio Calculator to calculate how many assembly machines you need in total for a recipe.")
+time.sleep(2)
+print("All you have to do is answer the following prompts.")
+time.sleep(2)
+
+item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ")
+factories_input = input("How many factories will be working on making the item?     ")
+rate_input = input("At what rate do you want to make the item?     ")
+
 # TODO: Request web page
+
+example_url = "https://kirkmcdonald.github.io/calc.html#data=1-0-0&items=electronic-circuit:f:1"
+base_url = "https://kirkmcdonald.github.io/calc.html"
+data_set = "#data=1.0.0"
+# This will be a variable input from the prompt later on, but for now will be hard coded as this version
+item = "&items=" + item_input 
+factories = ":f:" + factories_input
+rate = ":r:" + rate_input                                  
+
+url = example_url
+page = urlopen(url)
+html = page.read().decode("utf-8")
+soup = BeautifulSoup(html, "html.parser")
+
+print(soup)
 
 # TODO: Parse through HTML to get link to .csv
 
