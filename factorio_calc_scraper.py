@@ -28,6 +28,7 @@
 # Imports
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
+import mechanicalsoup
 import time
 
 print("Welcome to the Facotrio Calc Scraper!")
@@ -51,13 +52,12 @@ item = "&items=" + item_input
 factories = ":f:" + factories_input
 rate = ":r:" + rate_input                                  
 
+browser = mechanicalsoup.Browser()
 url = base_url + data_set + item + factories
 print(url)
-page = urlopen(url)
-html = page.read().decode("utf-8")
-soup = BeautifulSoup(html, "html.parser")
-
-print(soup)
+page = browser.get(url)
+print(page)
+print(page.soup)
 
 # TODO: Parse through HTML to get link to .csv
 
