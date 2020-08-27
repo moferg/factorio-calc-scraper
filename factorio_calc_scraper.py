@@ -51,7 +51,8 @@ item = "&items=" + item_input
 factories = ":f:" + factories_input
 rate = ":r:" + rate_input                                  
 
-url = example_url
+url = base_url + data_set + item + factories
+print(url)
 page = urlopen(url)
 html = page.read().decode("utf-8")
 soup = BeautifulSoup(html, "html.parser")
