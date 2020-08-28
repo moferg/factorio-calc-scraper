@@ -36,7 +36,7 @@ import mechanicalsoup
 import time
 import math
 
-print("Welcome to the Facotrio Calc Scraper!")
+print("Welcome to the Factorio Calc Scraper!")
 time.sleep(1)
 print("This script will scrape the site of the Factorio Calculator to calculate how many assembly machines you need in total for a recipe.")
 time.sleep(2)
@@ -45,8 +45,13 @@ time.sleep(2)
 
 item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
 # item_input = "advanced-circuit"
-# factories_input = input("How many factories will be working on making the item?     ")
-# rate_input = input("At what rate do you want to make the item?     ")
+factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
+if factories_or_rate == "factories":
+    factories_input = input("How many factories will be making the item?     ")
+elif factories_or_rate == "rate":
+    rate_input = input("At what rate do you want to make the item? (in items per minute)     ")
+else:
+    print("")
 
 # TODO: Request web page
 
@@ -70,10 +75,9 @@ url = example_url
 
 PATH = "C:\\Program Files (x86)\\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
-
 driver.get(url)
-
 driver.implicitly_wait(10)
+actions = ActionChains(driver)
 
 # Not sure why this code doesn't work while the dropdownWrapper selection and clicking does.....
 
@@ -81,22 +85,47 @@ driver.implicitly_wait(10)
 # print(csv_link)
 # print(type(csv_link))
 # driver.implicitly_wait(5)
-# ActionChains(driver).click(csv_link).perform()
+# actions.click(csv_link).perform()
 
 item_dropdown = driver.find_elements_by_class_name("dropdownWrapper")[0]
 # print(item_dropdown)
 # print(type(item_dropdown))
-ActionChains(driver).click(item_dropdown).perform()
+actions.click(item_dropdown).perform()
+actions.reset_actions()
 
 search_bar = driver.find_element_by_class_name("search")
 # print(search_bar)
 # print(type(search_bar))
-ActionChains(driver).send_keys(item_input).perform()
+actions.send_keys(item_input).perform()
+actions.reset_actions()
 
 item_link = driver.find_element_by_xpath('//img[@alt="' + item_input + '"]')
 # print(item_link)
 # print(type(item_link))
-ActionChains(driver).click(item_link).perform()
+actions.click(item_link).perform()
+actions.reset_actions()
+
+factories_input_field = driver.find_element_by_xpath("/html/body/table/tbody/tr/td[@id='targetparent']/ul[@id='targets']/li[@class='target']/input[1]")
+rate_input_field = driver.find_element_by_xpath("/html/body/table/tbody/tr/td[@id='targetparent']/ul[@id='targets']/li[@class='target']/input[2]")
+# print(factories_input_field)
+# print(type(factories_input_field))
+# print(rate_input_field)
+# print(type(rate_input_field))
+
+if factories_or_rate == "factories":
+    actions.send_keys_to_element(factories_input_field, u'\ue005')
+    actions.send_keys_to_element(factories_input_field, factories_input)
+    actions.send_keys_to_element(factories_input_field, u'\ue007')
+    actions.perform()
+    actions.reset_actions()
+elif factories_or_rate == "rate":
+    actions.send_keys_to_element(rate_input_field, u'\ue005')
+    actions.send_keys_to_element(rate_input_field, rate_input)
+    actions.send_keys_to_element(rate_input_field, u'\ue007')
+    actions.perform()
+    actions.reset_actions()
+else:
+    print("")
 
 # TODO: Parse through HTML to get total number of assembly machinces needed
     # Figure out how to loop through all the XPaths and put the WebElements in a list
