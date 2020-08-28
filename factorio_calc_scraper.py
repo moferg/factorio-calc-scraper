@@ -29,21 +29,22 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import mechanicalsoup
 import time
 import math
 
-# print("Welcome to the Facotrio Calc Scraper!")
-# time.sleep(1)
-# print("This script will scrape the site of the Factorio Calculator to calculate how many assembly machines you need in total for a recipe.")
-# time.sleep(2)
-# print("All you have to do is answer the following prompts.")
-# time.sleep(2)
+print("Welcome to the Facotrio Calc Scraper!")
+time.sleep(1)
+print("This script will scrape the site of the Factorio Calculator to calculate how many assembly machines you need in total for a recipe.")
+time.sleep(2)
+print("All you have to do is answer the following prompts.")
+time.sleep(2)
 
-# item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
-item_input = "advanced-circuit"
+item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
+# item_input = "advanced-circuit"
 # factories_input = input("How many factories will be working on making the item?     ")
 # rate_input = input("At what rate do you want to make the item?     ")
 
@@ -107,16 +108,59 @@ elem_list = driver.find_elements_by_xpath(base_elem_path)
 # print(type(elem_list)) 
 
 assembler_elem_list = []
+item_name_elem_list = []
+assembler_img_elem_list = []
 for i in range(len(elem_list)):
     assembler_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[" + str(i + 1) + "]/td[@class='factory right-align'][1]/tt"))
+    item_name_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[" + str(i + 1) + "]/td[@class='right-align']/img"))
+    try:
+        assembler_img_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[" + str(i + 1) + "]/td[@class='pad factory right-align leftmost']/img"))
+    except NoSuchElementException:
+        break
 # print(assembler_elem_list)
 # print(type(assembler_elem_list))
+# print(item_name_elem_list)
+# print(type(item_name_elem_list))
+# print(assembler_img_elem_list)
+# print(type(assembler_img_elem_list))
 
 assembler_elem_str_list = []
 for i in assembler_elem_list:
     assembler_elem_str_list.append(i.get_attribute("innerHTML"))
+# print("assembler_elem_str_list is:")
 # print(assembler_elem_str_list)
-# print(type(assembler_elem_str_list))
+
+assembler_img_elem_alt_list = []
+for i in assembler_img_elem_list:
+    assembler_img_elem_alt_list.append(i.get_attribute("alt"))
+# print("assembler_img_elem_alt_list is:")
+# print(assembler_img_elem_alt_list)
+
+item_name_str_list = []
+for i in item_name_elem_list:
+    item_name_str_list.append(i.get_attribute("alt"))
+# print("item_name_str_list before try catch block is:")
+# print(item_name_str_list)
+
+for i in range(len(item_name_str_list)):
+    try:
+        # print(not(assembler_img_elem_alt_list[i].startswith("assembling-machine")))
+        if not(assembler_img_elem_alt_list[i].startswith("assembling-machine")):
+            item_name_str_list.pop(i)
+    except IndexError:
+        item_name_str_list.pop()
+# print("item_name_str_list after try catch block is:")
+# print(item_name_str_list)
+
+for i in range(len(assembler_elem_str_list)):
+    try:
+        # print(not(assembler_img_elem_alt_list[i].startswith("assembling-machine")))
+        if not(assembler_img_elem_alt_list[i].startswith("assembling-machine")):
+            assembler_elem_str_list.pop(i)
+    except IndexError:
+        assembler_elem_str_list.pop()
+# print("assembler_elem_str_list after try catch block is:")
+# print(assembler_elem_str_list)
 
 assembler_elem_str_list = ' '.join(assembler_elem_str_list).split()
 
@@ -124,21 +168,27 @@ assembler_elem_float_list = []
 for i in assembler_elem_str_list:
     i = i.rstrip("&nbsp;")
     assembler_elem_float_list.append(float(i))
-print(assembler_elem_float_list)
-# print(type(assembler_elem_float_list))
+# print(assembler_elem_float_list)
 
-total_num_assemblers = 0
+assembler_elem_int_list =[]
 for i in assembler_elem_float_list:
-    # print(i)
-    i = math.ceil(i)
-    # print(i)
-    print(f"For this item you will need {i} assemblers")
-    total_num_assemblers += i
-print(f"You will need a total of {total_num_assemblers} assemblers")
-print(type(total_num_assemblers))
+    assembler_elem_int_list.append(math.ceil(i))
+# print(assembler_elem_int_list)
+total_num_assemblers = sum(assembler_elem_int_list)
+# print(total_num_assemblers)
+
+assembler_elem_str_list.clear()
+for i in assembler_elem_int_list:
+    assembler_elem_str_list.append(str(i))
+# print(assembler_elem_str_list)
+
+for x, y in zip(assembler_elem_str_list, item_name_str_list):
+    print(f"You will need {x} assemblers making {y}.")
+print(f"You will need {total_num_assemblers} assemblers in total.")
 
 # TODO: Clean up output
     # Format - "You will need {num_of_assemblers} to create {item}" repeat for item and each subitem and then "You will need a total of {tot_num_of_assemblers}"
         # TODO: Cycle through item and subitem names similar to number of assemblers
-
+            # TODO: Cycle through assembler_elem_list and check to make sure it is not a liquid
+            # Something like for item and subitem names but with image before assembler_count
 # TODO: Feature - change the assembler count or rate with input from prompt
