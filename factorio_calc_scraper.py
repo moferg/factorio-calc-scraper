@@ -33,6 +33,7 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import mechanicalsoup
 import time
+import math
 
 # print("Welcome to the Facotrio Calc Scraper!")
 # time.sleep(1)
@@ -82,18 +83,55 @@ driver.implicitly_wait(10)
 # ActionChains(driver).click(csv_link).perform()
 
 item_dropdown = driver.find_elements_by_class_name("dropdownWrapper")[0]
-print(item_dropdown)
-print(type(item_dropdown))
+# print(item_dropdown)
+# print(type(item_dropdown))
 ActionChains(driver).click(item_dropdown).perform()
 
 search_bar = driver.find_element_by_class_name("search")
-print(search_bar)
-print(type(search_bar))
+# print(search_bar)
+# print(type(search_bar))
 ActionChains(driver).send_keys(item).perform()
 
 item_link = driver.find_element_by_xpath('//img[@alt="' + item + '"]')
-print(item_link)
-print(type(item_link))
+# print(item_link)
+# print(type(item_link))
 ActionChains(driver).click(item_link).perform()
 
 # TODO: Parse through HTML to get total number of assembly machinces needed
+    # Figure out how to loop through all the XPaths and put the WebElements in a list
+    # Figure out how to extract the text from the html of a list of WebElements
+
+base_elem_path = "/html/body/div[@id='totals_tab']/table[@id='totals']/tr[@class='recipe-row display-row no-mods']"
+elem_list = driver.find_elements_by_xpath(base_elem_path)
+# print(elem_list)
+# print(type(elem_list)) 
+
+assembler_elem_list = []
+for i in range(len(elem_list)):
+    assembler_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[" + str(i + 1) + "]/td[@class='factory right-align'][1]/tt"))
+# print(assembler_elem_list)
+# print(type(assembler_elem_list))
+
+assembler_elem_str_list = []
+for i in assembler_elem_list:
+    assembler_elem_str_list.append(i.get_attribute("innerHTML"))
+# print(assembler_elem_str_list)
+# print(type(assembler_elem_str_list))
+
+assembler_elem_str_list = ' '.join(assembler_elem_str_list).split()
+
+assembler_elem_float_list = []
+for i in assembler_elem_str_list:
+    i = i.rstrip("&nbsp;")
+    assembler_elem_float_list.append(float(i))
+print(assembler_elem_float_list)
+print(type(assembler_elem_float_list))
+
+total_num_assemblers = 0
+for i in assembler_elem_float_list:
+    # print(i)
+    i = math.ceil(i)
+    # print(i)
+    total_num_assemblers += i
+print(total_num_assemblers)
+print(type(total_num_assemblers))
