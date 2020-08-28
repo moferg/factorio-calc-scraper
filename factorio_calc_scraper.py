@@ -26,41 +26,74 @@
 # In the future, this script will be able to handle different levels of assembly machines and rates, but for now it will focus on the defaults
 
 # Imports
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import mechanicalsoup
 import time
 
-print("Welcome to the Facotrio Calc Scraper!")
-time.sleep(1)
-print("This script will scrape the site of the Factorio Calculator to calculate how many assembly machines you need in total for a recipe.")
-time.sleep(2)
-print("All you have to do is answer the following prompts.")
-time.sleep(2)
+# print("Welcome to the Facotrio Calc Scraper!")
+# time.sleep(1)
+# print("This script will scrape the site of the Factorio Calculator to calculate how many assembly machines you need in total for a recipe.")
+# time.sleep(2)
+# print("All you have to do is answer the following prompts.")
+# time.sleep(2)
 
-item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ")
-factories_input = input("How many factories will be working on making the item?     ")
-rate_input = input("At what rate do you want to make the item?     ")
+# item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ")
+# factories_input = input("How many factories will be working on making the item?     ")
+# rate_input = input("At what rate do you want to make the item?     ")
 
 # TODO: Request web page
 
 example_url = "https://kirkmcdonald.github.io/calc.html#data=1-0-0&items=electronic-circuit:f:1"
-base_url = "https://kirkmcdonald.github.io/calc.html"
-data_set = "#data=1.0.0"
-# This will be a variable input from the prompt later on, but for now will be hard coded as this version
-item = "&items=" + item_input 
-factories = ":f:" + factories_input
-rate = ":r:" + rate_input                                  
+# base_url = "https://kirkmcdonald.github.io/calc.html"
+# data_set = "#data=1.0.0"
+# # This will be a variable input from the prompt later on, but for now will be hard coded as this version
+# item = "&items=" + item_input 
+item = "advanced-circuit"
+# factories = ":f:" + factories_input
+# rate = ":r:" + rate_input                                  
 
-browser = mechanicalsoup.Browser()
-url = base_url + data_set + item + factories
-print(url)
-page = browser.get(url)
-print(page)
-print(page.soup)
+# browser = mechanicalsoup.StatefulBrowser()
+# url = base_url + data_set + item + factories
+url = example_url
+# print(url)
+# page = browser.get(url)
+# print(page)
+# print(page.soup)
 
-# TODO: Parse through HTML to get link to .csv
+# TODO: Automate inputting info into calc site 
 
-# TODO: Pull data from .csv
+PATH = "C:\\Program Files (x86)\\chromedriver.exe"
+driver = webdriver.Chrome(PATH)
 
-# TODO: Manipulate data from .csv to show total number of assemblers needed
+driver.get(url)
+
+driver.implicitly_wait(10)
+
+# Not sure why this code doesn't work while the dropdownWrapper selection and clicking does.....
+
+# csv_link = driver.find_element_by_link_text("CSV")
+# print(csv_link)
+# print(type(csv_link))
+# driver.implicitly_wait(5)
+# ActionChains(driver).click(csv_link).perform()
+
+item_dropdown = driver.find_elements_by_class_name("dropdownWrapper")[0]
+print(item_dropdown)
+print(type(item_dropdown))
+ActionChains(driver).click(item_dropdown).perform()
+
+search_bar = driver.find_element_by_class_name("search")
+print(search_bar)
+print(type(search_bar))
+ActionChains(driver).send_keys(item).perform()
+
+item_link = driver.find_element_by_xpath('//img[@alt="' + item + '"]')
+print(item_link)
+print(type(item_link))
+ActionChains(driver).click(item_link).perform()
+
+# TODO: Parse through HTML to get total number of assembly machinces needed
