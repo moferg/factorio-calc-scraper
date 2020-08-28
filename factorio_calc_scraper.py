@@ -42,7 +42,8 @@ import math
 # print("All you have to do is answer the following prompts.")
 # time.sleep(2)
 
-# item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ")
+# item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
+item_input = "advanced-circuit"
 # factories_input = input("How many factories will be working on making the item?     ")
 # rate_input = input("At what rate do you want to make the item?     ")
 
@@ -52,8 +53,7 @@ example_url = "https://kirkmcdonald.github.io/calc.html#data=1-0-0&items=electro
 # base_url = "https://kirkmcdonald.github.io/calc.html"
 # data_set = "#data=1.0.0"
 # # This will be a variable input from the prompt later on, but for now will be hard coded as this version
-# item = "&items=" + item_input 
-item = "advanced-circuit"
+# item = "&items=" + item_input
 # factories = ":f:" + factories_input
 # rate = ":r:" + rate_input                                  
 
@@ -90,9 +90,9 @@ ActionChains(driver).click(item_dropdown).perform()
 search_bar = driver.find_element_by_class_name("search")
 # print(search_bar)
 # print(type(search_bar))
-ActionChains(driver).send_keys(item).perform()
+ActionChains(driver).send_keys(item_input).perform()
 
-item_link = driver.find_element_by_xpath('//img[@alt="' + item + '"]')
+item_link = driver.find_element_by_xpath('//img[@alt="' + item_input + '"]')
 # print(item_link)
 # print(type(item_link))
 ActionChains(driver).click(item_link).perform()
@@ -125,13 +125,20 @@ for i in assembler_elem_str_list:
     i = i.rstrip("&nbsp;")
     assembler_elem_float_list.append(float(i))
 print(assembler_elem_float_list)
-print(type(assembler_elem_float_list))
+# print(type(assembler_elem_float_list))
 
 total_num_assemblers = 0
 for i in assembler_elem_float_list:
     # print(i)
     i = math.ceil(i)
     # print(i)
+    print(f"For this item you will need {i} assemblers")
     total_num_assemblers += i
-print(total_num_assemblers)
+print(f"You will need a total of {total_num_assemblers} assemblers")
 print(type(total_num_assemblers))
+
+# TODO: Clean up output
+    # Format - "You will need {num_of_assemblers} to create {item}" repeat for item and each subitem and then "You will need a total of {tot_num_of_assemblers}"
+        # TODO: Cycle through item and subitem names similar to number of assemblers
+
+# TODO: Feature - change the assembler count or rate with input from prompt
