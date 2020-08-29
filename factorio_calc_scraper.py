@@ -208,42 +208,45 @@ print("item_img_elem_alt_text_list is:")
 print(item_img_elem_alt_text_list)
 print(len(item_img_elem_alt_text_list))
 
-assembler_list = []
-chem_plant_list = []
-furnace_list = []
-miner_list = []
-oil_refinery_list = []
-other_list = []                 #other_list is for other machines such as offshore pumps, rocket silos, and pumpjacks(crude oil)
-for x, y in zip(factory_elem_float_list, factory_img_elem_alt_text_list):
-    if y.startswith('assembling'):
-        assembler_list.append(x)
-    elif y.startswith("chemical"):
-        chem_plant_list.append(x)
-    elif y.endswith('furnace'):
-        furnace_list.append(x)
-    elif y.endswith('drill'):
-        miner_list.append(x)
-    elif y.startswith('oil'):
-        oil_refinery_list.append(x)
-    else:
-        other_list.append(x)
-print('assembler_list is:')
-print(assembler_list)
-print('chem_plant_list is:')
-print(chem_plant_list)
-print('furnace_list is:')
-print(furnace_list)
-print('miner_list is:')
-print(miner_list)
-print('oil_refinery_list is:')
-print(oil_refinery_list)
-print('other_list is:')
-print(other_list)
+empty_dict = {}
+item_dict = empty_dict.fromkeys(item_img_elem_alt_text_list)
+print(item_dict)
 
-# assembler_elem_list = []
-# chem_plant_elem_list = []
-# item_name_elem_list = []
-# assembler_img_elem_list = []
+for x, y, z in zip(item_img_elem_alt_text_list, factory_img_elem_alt_text_list, factory_elem_float_list):
+    item_dict[x] = [y, z]
+print(item_dict)
+
+# assembler_list = []
+# chem_plant_list = []
+# furnace_list = []
+# miner_list = []
+# oil_refinery_list = []
+# other_list = []                 #other_list is for other machines such as offshore pumps, rocket silos, and pumpjacks(crude oil)
+# for x, y in zip(factory_elem_float_list, factory_img_elem_alt_text_list):
+#     if y.startswith('assembling'):
+#         assembler_list.append(x)
+#     elif y.startswith("chemical"):
+#         chem_plant_list.append(x)
+#     elif y.endswith('furnace'):
+#         furnace_list.append(x)
+#     elif y.endswith('drill'):
+#         miner_list.append(x)
+#     elif y.startswith('oil'):
+#         oil_refinery_list.append(x)
+#     else:
+#         other_list.append(x)
+# print('assembler_list is:')
+# print(assembler_list)
+# print('chem_plant_list is:')
+# print(chem_plant_list)
+# print('furnace_list is:')
+# print(furnace_list)
+# print('miner_list is:')
+# print(miner_list)
+# print('oil_refinery_list is:')
+# print(oil_refinery_list)
+# print('other_list is:')
+# print(other_list)
 
 # assembler_elem_str_list = []
 # for i in assembler_elem_list:
