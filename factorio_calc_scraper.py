@@ -141,14 +141,16 @@ else:
 
 factory_elem_list = []
 factory_elem_list.extend(driver.find_elements_by_xpath("//td[@class='factory right-align'][1]/tt"))
-print(factory_elem_list)
-print(len(factory_elem_list))
-img_elem_list = []
-img_elem_list.extend(driver.find_elements_by_xpath("//td[@class='pad factory right-align leftmost']/img[@class='icon display']"))
-print(img_elem_list)
-print(len(img_elem_list))
-# len(img_elem_list) is one less than len(factory_elem_list) if oil is involved in recipe
-# This is because pumpjacks are not constant and therefore oil does not have a factory img
+# print(factory_elem_list)
+# print(len(factory_elem_list))
+factory_img_elem_list = []
+factory_img_elem_list.extend(driver.find_elements_by_xpath("//td[@class='pad factory right-align leftmost']/img[@class='icon display']"))
+# print(factory_img_elem_list)
+# print(len(factory_img_elem_list))
+item_img_elem_list = []
+item_img_elem_list.extend(driver.find_elements_by_xpath("//td[@class='right-align']/img"))
+# print(item_img_elem_list)
+# print(len(item_img_elem_list))
 
 # assembler_elem_list = []
 # chem_plant_elem_list = []
@@ -174,78 +176,96 @@ print(len(img_elem_list))
 # print(assembler_img_elem_list)
 # print(type(assembler_img_elem_list))
 
-assembler_elem_list = []
-chem_plant_elem_list = []
-item_name_elem_list = []
-assembler_img_elem_list = []
+factory_elem_str_list = []
+for i in factory_elem_list:
+    factory_elem_str_list.append(i.get_attribute("innerHTML"))
+print("factory_elem_str_list is:")
+print(factory_elem_str_list)
 
-assembler_elem_str_list = []
-for i in assembler_elem_list:
-    assembler_elem_str_list.append(i.get_attribute("innerHTML"))
-print("assembler_elem_str_list is:")
-print(assembler_elem_str_list)
+factory_img_elem_alt_text_list = []
+for i in factory_img_elem_list:
+    factory_img_elem_alt_text_list.append(i.get_attribute("alt"))
+print("factory_img_elem_alt_text_list is:")
+print(factory_img_elem_alt_text_list)
 
-chem_plant_elem_str_list = []
-for i in chem_plant_elem_list:
-    chem_plant_elem_str_list.append(i.get_attribute("innerHTML"))
-print("chem_plant_elem_str_list is:")
-print(chem_plant_elem_str_list)
+item_img_elem_alt_text_list = []
+for i in item_img_elem_list:
+    item_img_elem_alt_text_list.append(i.get_attribute("alt"))
+print("item_img_elem_alt_text_list is:")
+print(item_img_elem_alt_text_list)
 
-assembler_img_elem_alt_list = []
-for i in assembler_img_elem_list:
-    assembler_img_elem_alt_list.append(i.get_attribute("alt"))
+# assembler_elem_list = []
+# chem_plant_elem_list = []
+# item_name_elem_list = []
+# assembler_img_elem_list = []
+
+# assembler_elem_str_list = []
+# for i in assembler_elem_list:
+#     assembler_elem_str_list.append(i.get_attribute("innerHTML"))
+# print("assembler_elem_str_list is:")
+# print(assembler_elem_str_list)
+
+# chem_plant_elem_str_list = []
+# for i in chem_plant_elem_list:
+#     chem_plant_elem_str_list.append(i.get_attribute("innerHTML"))
+# print("chem_plant_elem_str_list is:")
+# print(chem_plant_elem_str_list)
+
+# assembler_img_elem_alt_list = []
+# for i in assembler_img_elem_list:
+#     assembler_img_elem_alt_list.append(i.get_attribute("alt"))
 # print("assembler_img_elem_alt_list is:")
 # print(assembler_img_elem_alt_list)
 
-item_name_str_list = []
-for i in item_name_elem_list:
-    item_name_str_list.append(i.get_attribute("alt"))
+# item_name_str_list = []
+# for i in item_name_elem_list:
+#     item_name_str_list.append(i.get_attribute("alt"))
 # print("item_name_str_list before try catch block is:")
 # print(item_name_str_list)
 
-for i in range(len(item_name_str_list)):
-    try:
-        # print(not(assembler_img_elem_alt_list[i].startswith("assembling-machine")))
-        if not(assembler_img_elem_alt_list[i].startswith("assembling-machine")):
-            item_name_str_list.pop(i)
-    except IndexError:
-        item_name_str_list.pop()
+# for i in range(len(item_name_str_list)):
+#     try:
+#          print(not(assembler_img_elem_alt_list[i].startswith("assembling-machine")))
+#         if not(assembler_img_elem_alt_list[i].startswith("assembling-machine")):
+#             item_name_str_list.pop(i)
+#     except IndexError:
+#         item_name_str_list.pop()
 # print("item_name_str_list after try catch block is:")
 # print(item_name_str_list)
 
-for i in range(len(assembler_elem_str_list)):
-    try:
-        # print(not(assembler_img_elem_alt_list[i].startswith("assembling-machine")))
-        if not(assembler_img_elem_alt_list[i].startswith("assembling-machine")):
-            assembler_elem_str_list.pop(i)
-    except IndexError:
-        assembler_elem_str_list.pop()
+# for i in range(len(assembler_elem_str_list)):
+#     try:
+#         print(not(assembler_img_elem_alt_list[i].startswith("assembling-machine")))
+#         if not(assembler_img_elem_alt_list[i].startswith("assembling-machine")):
+#             assembler_elem_str_list.pop(i)
+#     except IndexError:
+#         assembler_elem_str_list.pop()
 # print("assembler_elem_str_list after try catch block is:")
 # print(assembler_elem_str_list)
 
-assembler_elem_str_list = ' '.join(assembler_elem_str_list).split()
+# assembler_elem_str_list = ' '.join(assembler_elem_str_list).split()
 
-assembler_elem_float_list = []
-for i in assembler_elem_str_list:
-    i = i.rstrip("&nbsp;")
-    assembler_elem_float_list.append(float(i))
+# assembler_elem_float_list = []
+# for i in assembler_elem_str_list:
+#     i = i.rstrip("&nbsp;")
+#     assembler_elem_float_list.append(float(i))
 # print(assembler_elem_float_list)
 
-assembler_elem_int_list =[]
-for i in assembler_elem_float_list:
-    assembler_elem_int_list.append(math.ceil(i))
+# assembler_elem_int_list =[]
+# for i in assembler_elem_float_list:
+#     assembler_elem_int_list.append(math.ceil(i))
 # print(assembler_elem_int_list)
-total_num_assemblers = sum(assembler_elem_int_list)
+# total_num_assemblers = sum(assembler_elem_int_list)
 # print(total_num_assemblers)
 
-assembler_elem_str_list.clear()
-for i in assembler_elem_int_list:
-    assembler_elem_str_list.append(str(i))
+# assembler_elem_str_list.clear()
+# for i in assembler_elem_int_list:
+#     assembler_elem_str_list.append(str(i))
 # print(assembler_elem_str_list)
 
-for x, y in zip(assembler_elem_str_list, item_name_str_list):
-    print(f"You will need {x} assemblers making {y}.")
-print(f"You will need {total_num_assemblers} assemblers in total.")
+# for x, y in zip(assembler_elem_str_list, item_name_str_list):
+#     print(f"You will need {x} assemblers making {y}.")
+# print(f"You will need {total_num_assemblers} assemblers in total.")
 
 # TODO: (DONE) Clean up output
 # Format - "You will need {num_of_assemblers} to create {item}" repeat for item and each subitem and then "You will need a total of {tot_num_of_assemblers}"
