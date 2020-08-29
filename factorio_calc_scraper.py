@@ -181,19 +181,39 @@ for i in factory_elem_list:
     factory_elem_str_list.append(i.get_attribute("innerHTML"))
 print("factory_elem_str_list is:")
 print(factory_elem_str_list)
+print(len(factory_elem_str_list))
+
+
+factory_elem_str_list = ' '.join(factory_elem_str_list).split()
+
+factory_elem_float_list = []
+for i in factory_elem_str_list:
+    i = i.rstrip("&nbsp;")
+    factory_elem_float_list.append(float(i))
+print("factory_elem_float_list is:")
+print(factory_elem_float_list)
+print(len(factory_elem_float_list))
 
 factory_img_elem_alt_text_list = []
 for i in factory_img_elem_list:
     factory_img_elem_alt_text_list.append(i.get_attribute("alt"))
 print("factory_img_elem_alt_text_list is:")
 print(factory_img_elem_alt_text_list)
+print(len(factory_img_elem_alt_text_list))
 
 item_img_elem_alt_text_list = []
 for i in item_img_elem_list:
     item_img_elem_alt_text_list.append(i.get_attribute("alt"))
 print("item_img_elem_alt_text_list is:")
 print(item_img_elem_alt_text_list)
+print(len(item_img_elem_alt_text_list))
 
+assembler_list = []
+chem_plant_list = []
+furnace_list = []
+miner_list = []
+oil_refinery_list = []
+other_list = []                 #other_list is for other machines such as offshore pumps, rocket silos, and pumpjacks(crude oil)
 # assembler_elem_list = []
 # chem_plant_elem_list = []
 # item_name_elem_list = []
