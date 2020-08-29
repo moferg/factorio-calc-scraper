@@ -36,25 +36,25 @@ import mechanicalsoup
 import time
 import math
 
-# print("Welcome to the Factorio Calc Scraper!")
-# time.sleep(1)
-# print("This script will scrape the site of the Factorio Calculator to calculate how many assembly machines you need in total for a recipe.")
-# time.sleep(2)
-# print("All you have to do is answer the following prompts.")
-# time.sleep(2)
+print("Welcome to the Factorio Calc Scraper!")
+time.sleep(1)
+print("This script will scrape the site of the Factorio Calculator to calculate how many factories you need in total for a recipe.")
+time.sleep(2)
+print("All you have to do is answer the following prompts.")
+time.sleep(2)
 
-# item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
-item_input = "space-science-pack"
-# factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
-factories_or_rate = "factories"
-factories_input = "1"
-rate_input = "3000"
-# if factories_or_rate == "factories":
-#     factories_input = input("How many factories will be making the item?     ")
-# elif factories_or_rate == "rate":
-    # rate_input = input("At what rate do you want to make the item? (in items per minute)     ")
-# else:
-#     print("")
+item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
+# item_input = "space-science-pack"
+factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
+# factories_or_rate = "factories"
+# factories_input = "1"
+# rate_input = "3000"
+if factories_or_rate == "factories":
+    factories_input = input("How many factories will be making the item?     ")
+elif factories_or_rate == "rate":
+    rate_input = input("At what rate do you want to make the item? (in items per minute)     ")
+else:
+    print("")
 
 # TODO: (DONE) Request web page
 
