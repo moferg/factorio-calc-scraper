@@ -1,6 +1,6 @@
 # Factorio Calc Scraper - Marshall Ferguson - 8/2020
 
-# TODO: Figure out template for url to get different results from calc
+# TODO: (DONE) Figure out template for url to get different results from calc
 
 # base url =    https://kirkmcdonald.github.io/calc.html
 
@@ -53,7 +53,7 @@ elif factories_or_rate == "rate":
 else:
     print("")
 
-# TODO: Request web page
+# TODO: (DONE) Request web page
 
 example_url = "https://kirkmcdonald.github.io/calc.html#data=1-0-0&items=electronic-circuit:f:1"
 # base_url = "https://kirkmcdonald.github.io/calc.html"
@@ -71,7 +71,7 @@ url = example_url
 # print(page)
 # print(page.soup)
 
-# TODO: Automate inputting info into calc site 
+# TODO: (DONE) Automate inputting info into calc site 
 
 PATH = "C:\\Program Files (x86)\\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
@@ -127,7 +127,7 @@ elif factories_or_rate == "rate":
 else:
     print("")
 
-# TODO: Parse through HTML to get total number of assembly machinces needed
+# TODO: (DONE) Parse through HTML to get total number of assembly machinces needed
     # Figure out how to loop through all the XPaths and put the WebElements in a list
     # Figure out how to extract the text from the html of a list of WebElements
 
@@ -215,9 +215,17 @@ for x, y in zip(assembler_elem_str_list, item_name_str_list):
     print(f"You will need {x} assemblers making {y}.")
 print(f"You will need {total_num_assemblers} assemblers in total.")
 
-# TODO: Clean up output
-    # Format - "You will need {num_of_assemblers} to create {item}" repeat for item and each subitem and then "You will need a total of {tot_num_of_assemblers}"
-        # TODO: Cycle through item and subitem names similar to number of assemblers
-            # TODO: Cycle through assembler_elem_list and check to make sure it is not a liquid
-            # Something like for item and subitem names but with image before assembler_count
+# TODO: (DONE) Clean up output
+# Format - "You will need {num_of_assemblers} to create {item}" repeat for item and each subitem and then "You will need a total of {tot_num_of_assemblers}"
+    # TODO: (DONE) Cycle through item and subitem names similar to number of assemblers
+        # TODO: (DONE) Cycle through assembler_elem_list and check to make sure it is not a liquid
+        # Something like for item and subitem names but with image before assembler_count
 # TODO: Feature - change the assembler count or rate with input from prompt
+# TODO: Feature - ouput includes how many miners, furnaces, pumpjacks, chemical plants, and oil refineries neeeded for recipe    
+    # Step 1: Chemical Plants
+    # Step 2: Furnaces
+    # Step 3: Miners
+    # Step 4: Oil Refineries
+    # Step 5: Pumpjacks
+# TODO: Feature - ouput includes how much power each subrecipe will take and how much power the recipe will take in total
+# TODO: Feature - ouput includes how many belts of each material each subrecipe needs and how many belts of the item will be produced
