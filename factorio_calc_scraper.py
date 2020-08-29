@@ -131,7 +131,8 @@ else:
     # Figure out how to loop through all the XPaths and put the WebElements in a list
     # Figure out how to extract the text from the html of a list of WebElements
 
-base_elem_path = "/html/body/div[@id='totals_tab']/table[@id='totals']/tr[@class='recipe-row display-row no-mods']"
+base_elem_path = "/html/body/div[@id='totals_tab']/table[@id='totals']/tr"
+# base_elem_path = "/html/body/div[@id='totals_tab']/table[@id='totals']/tr[@class='recipe-row display-row no-mods']"
 elem_list = driver.find_elements_by_xpath(base_elem_path)
 # print(elem_list)
 # print(type(elem_list)) 
@@ -140,10 +141,10 @@ assembler_elem_list = []
 item_name_elem_list = []
 assembler_img_elem_list = []
 for i in range(len(elem_list)):
-    assembler_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[" + str(i + 1) + "]/td[@class='factory right-align'][1]/tt"))
-    item_name_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[" + str(i + 1) + "]/td[@class='right-align']/img"))
+    assembler_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row no-mods'][" + str(i + 1) + "]/td[@class='factory right-align'][1]/tt"))
+    item_name_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row no-mods'][" + str(i + 1) + "]/td[@class='right-align']/img"))
     try:
-        assembler_img_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[" + str(i + 1) + "]/td[@class='pad factory right-align leftmost']/img"))
+        assembler_img_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row no-mods'][" + str(i + 1) + "]/td[@class='pad factory right-align leftmost']/img"))
     except NoSuchElementException:
         break
 # print(assembler_elem_list)
