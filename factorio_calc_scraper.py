@@ -180,8 +180,8 @@ factory_elem_str_list = []
 for i in factory_elem_list:
     factory_elem_str_list.append(i.get_attribute("innerHTML"))
 print("factory_elem_str_list is:")
-print(factory_elem_str_list)
-print(len(factory_elem_str_list))
+# print(factory_elem_str_list)
+# print(len(factory_elem_str_list))
 
 
 factory_elem_str_list = ' '.join(factory_elem_str_list).split()
@@ -191,30 +191,38 @@ for i in factory_elem_str_list:
     i = i.rstrip("&nbsp;")
     factory_elem_float_list.append(float(i))
 print("factory_elem_float_list is:")
-print(factory_elem_float_list)
-print(len(factory_elem_float_list))
+# print(factory_elem_float_list)
+# print(len(factory_elem_float_list))
 
 factory_img_elem_alt_text_list = []
 for i in factory_img_elem_list:
     factory_img_elem_alt_text_list.append(i.get_attribute("alt"))
 print("factory_img_elem_alt_text_list is:")
-print(factory_img_elem_alt_text_list)
-print(len(factory_img_elem_alt_text_list))
+# print(factory_img_elem_alt_text_list)
+# print(len(factory_img_elem_alt_text_list))
 
 item_img_elem_alt_text_list = []
 for i in item_img_elem_list:
     item_img_elem_alt_text_list.append(i.get_attribute("alt"))
 print("item_img_elem_alt_text_list is:")
-print(item_img_elem_alt_text_list)
-print(len(item_img_elem_alt_text_list))
+# print(item_img_elem_alt_text_list)
+# print(len(item_img_elem_alt_text_list))
 
 empty_dict = {}
 item_dict = empty_dict.fromkeys(item_img_elem_alt_text_list)
-print(item_dict)
+# print(item_dict)
 
 for x, y, z in zip(item_img_elem_alt_text_list, factory_img_elem_alt_text_list, factory_elem_float_list):
     item_dict[x] = [y, z]
-print(item_dict)
+# print(item_dict)
+
+item_dict.pop('crude-oil')
+# Removing the last key because a value is not generated for crude oil
+# Later on this could be item_dict['crude-oil'] = {rate of crude oil needed} once I add in the rates needed for each recipe
+
+for i in item_dict:
+    print(f"You will need {item_dict.get(i)[1]} {item_dict.get(i)[0]} to make {i}")
+print(f"You will need {math.ceil(sum(factory_elem_float_list))} factories in total to make {item_input}")
 
 # assembler_list = []
 # chem_plant_list = []
@@ -321,8 +329,8 @@ print(item_dict)
     # TODO: (DONE) Cycle through item and subitem names similar to number of assemblers
         # TODO: (DONE) Cycle through assembler_elem_list and check to make sure it is not a liquid
         # Something like for item and subitem names but with image before assembler_count
-# TODO: Feature - change the assembler count or rate with input from prompt
-# TODO: Feature - ouput includes how many miners, furnaces, chemical plants, and oil refineries neeeded for recipe    
+# TODO: (DONE) Feature - change the assembler count or rate with input from prompt
+# TODO: (DONE) Feature - ouput includes how many miners, furnaces, chemical plants, and oil refineries neeeded for recipe    
     # Step 1: Chemical Plants
     # Step 2: Furnaces
     # Step 3: Miners
