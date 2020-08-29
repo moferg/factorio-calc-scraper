@@ -36,22 +36,25 @@ import mechanicalsoup
 import time
 import math
 
-print("Welcome to the Factorio Calc Scraper!")
-time.sleep(1)
-print("This script will scrape the site of the Factorio Calculator to calculate how many assembly machines you need in total for a recipe.")
-time.sleep(2)
-print("All you have to do is answer the following prompts.")
-time.sleep(2)
+# print("Welcome to the Factorio Calc Scraper!")
+# time.sleep(1)
+# print("This script will scrape the site of the Factorio Calculator to calculate how many assembly machines you need in total for a recipe.")
+# time.sleep(2)
+# print("All you have to do is answer the following prompts.")
+# time.sleep(2)
 
-item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
-# item_input = "advanced-circuit"
-factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
-if factories_or_rate == "factories":
-    factories_input = input("How many factories will be making the item?     ")
-elif factories_or_rate == "rate":
-    rate_input = input("At what rate do you want to make the item? (in items per minute)     ")
-else:
-    print("")
+# item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
+item_input = "space-science-pack"
+# factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
+factories_or_rate = "factories"
+factories_input = "1"
+rate_input = "3000"
+# if factories_or_rate == "factories":
+#     factories_input = input("How many factories will be making the item?     ")
+# elif factories_or_rate == "rate":
+    # rate_input = input("At what rate do you want to make the item? (in items per minute)     ")
+# else:
+#     print("")
 
 # TODO: (DONE) Request web page
 
@@ -131,34 +134,62 @@ else:
     # Figure out how to loop through all the XPaths and put the WebElements in a list
     # Figure out how to extract the text from the html of a list of WebElements
 
-base_elem_path = "/html/body/div[@id='totals_tab']/table[@id='totals']/tr"
-# base_elem_path = "/html/body/div[@id='totals_tab']/table[@id='totals']/tr[@class='recipe-row display-row no-mods']"
-elem_list = driver.find_elements_by_xpath(base_elem_path)
+# base_elem_path = "/html/body/div[@id='totals_tab']/table[@id='totals']/tr"
+# elem_list = driver.find_elements_by_xpath(base_elem_path)
 # print(elem_list)
 # print(type(elem_list)) 
 
-assembler_elem_list = []
-item_name_elem_list = []
-assembler_img_elem_list = []
-for i in range(len(elem_list)):
-    assembler_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row no-mods'][" + str(i + 1) + "]/td[@class='factory right-align'][1]/tt"))
-    item_name_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row no-mods'][" + str(i + 1) + "]/td[@class='right-align']/img"))
-    try:
-        assembler_img_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row no-mods'][" + str(i + 1) + "]/td[@class='pad factory right-align leftmost']/img"))
-    except NoSuchElementException:
-        break
+factory_elem_list = []
+factory_elem_list.extend(driver.find_elements_by_xpath("//td[@class='factory right-align'][1]/tt"))
+print(factory_elem_list)
+print(len(factory_elem_list))
+img_elem_list = []
+img_elem_list.extend(driver.find_elements_by_xpath("//td[@class='pad factory right-align leftmost']/img[@class='icon display']"))
+print(img_elem_list)
+print(len(img_elem_list))
+# len(img_elem_list) is one less than len(factory_elem_list) if oil is involved in recipe
+# This is because pumpjacks are not constant and therefore oil does not have a factory img
+
+# assembler_elem_list = []
+# chem_plant_elem_list = []
+# item_name_elem_list = []
+# assembler_img_elem_list = []
+# for i in range(len(elem_list)):
+#     try:
+#         factory_elem_list.extend(driver.find_elements_by_xpath("//td[@class='factory right-align'][1]/tt"))
+#         assembler_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row no-mods'][" + str(i + 1) + "]/td[@class='factory right-align'][1]/tt"))
+#         chem_plant_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row'][" + str(i + 1) + "]/td[@class='factory right-align'][1]/tt"))
+#         item_name_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row no-mods'][" + str(i + 1) + "]/td[@class='right-align']/img"))
+#         assembler_img_elem_list.append(driver.find_element_by_xpath(base_elem_path + "[@class='recipe-row display-row no-mods'][" + str(i + 1) + "]/td[@class='pad factory right-align leftmost']/img"))
+#     except NoSuchElementException:
+#         break
+# print(factory_elem_list)
+# print(type(factory_elem_list))
 # print(assembler_elem_list)
 # print(type(assembler_elem_list))
+# print(chem_plant_elem_list)
+# print(type(chem_plant_elem_list))
 # print(item_name_elem_list)
 # print(type(item_name_elem_list))
 # print(assembler_img_elem_list)
 # print(type(assembler_img_elem_list))
 
+assembler_elem_list = []
+chem_plant_elem_list = []
+item_name_elem_list = []
+assembler_img_elem_list = []
+
 assembler_elem_str_list = []
 for i in assembler_elem_list:
     assembler_elem_str_list.append(i.get_attribute("innerHTML"))
-# print("assembler_elem_str_list is:")
-# print(assembler_elem_str_list)
+print("assembler_elem_str_list is:")
+print(assembler_elem_str_list)
+
+chem_plant_elem_str_list = []
+for i in chem_plant_elem_list:
+    chem_plant_elem_str_list.append(i.get_attribute("innerHTML"))
+print("chem_plant_elem_str_list is:")
+print(chem_plant_elem_str_list)
 
 assembler_img_elem_alt_list = []
 for i in assembler_img_elem_list:
@@ -222,11 +253,10 @@ print(f"You will need {total_num_assemblers} assemblers in total.")
         # TODO: (DONE) Cycle through assembler_elem_list and check to make sure it is not a liquid
         # Something like for item and subitem names but with image before assembler_count
 # TODO: Feature - change the assembler count or rate with input from prompt
-# TODO: Feature - ouput includes how many miners, furnaces, pumpjacks, chemical plants, and oil refineries neeeded for recipe    
+# TODO: Feature - ouput includes how many miners, furnaces, chemical plants, and oil refineries neeeded for recipe    
     # Step 1: Chemical Plants
     # Step 2: Furnaces
     # Step 3: Miners
     # Step 4: Oil Refineries
-    # Step 5: Pumpjacks
 # TODO: Feature - ouput includes how much power each subrecipe will take and how much power the recipe will take in total
 # TODO: Feature - ouput includes how many belts of each material each subrecipe needs and how many belts of the item will be produced
