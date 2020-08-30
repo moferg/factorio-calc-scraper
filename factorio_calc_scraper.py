@@ -36,13 +36,14 @@ import mechanicalsoup
 import time
 import math
 
+# Output a menu to guide user's input
+
 print("Welcome to the Factorio Calc Scraper!")
 time.sleep(1)
 print("This script will scrape the site of the Factorio Calculator to calculate how many factories you need in total for a recipe.")
 time.sleep(2)
 print("All you have to do is answer the following prompts.")
 time.sleep(2)
-
 item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
 # item_input = "space-science-pack"
 factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
@@ -90,6 +91,8 @@ actions = ActionChains(driver)
 # driver.implicitly_wait(5)
 # actions.click(csv_link).perform()
 
+# Find the desired HTML elements on the website with selenium
+
 item_dropdown = driver.find_elements_by_class_name("dropdownWrapper")[0]
 # print(item_dropdown)
 # print(type(item_dropdown))
@@ -115,6 +118,8 @@ rate_input_field = driver.find_element_by_xpath("/html/body/table/tbody/tr/td[@i
 # print(rate_input_field)
 # print(type(rate_input_field))
 
+# Input the user supplied input into a search bar
+
 if factories_or_rate == "factories":
     actions.send_keys_to_element(factories_input_field, u'\ue005')
     actions.send_keys_to_element(factories_input_field, factories_input)
@@ -134,6 +139,8 @@ else:
     # Figure out how to loop through all the XPaths and put the WebElements in a list
     # Figure out how to extract the text from the html of a list of WebElements 
 
+# Create lists of WebElements
+
 rates_elem_list = []
 rates_elem_list.extend(driver.find_elements_by_xpath("//table[@id='totals']/tr/td[2]/tt"))
 # print(all_rates_elem_list)
@@ -151,6 +158,8 @@ item_img_elem_list.extend(driver.find_elements_by_xpath("//td[@class='right-alig
 # print(item_img_elem_list)
 # print(len(item_img_elem_list))
 
+# Loop through lists of WebElements and create lists of innerHTML(str's)
+
 rates_innerHTML_list = []
 for i in rates_elem_list:
     rates_innerHTML_list.append(i.get_attribute("innerHTML"))
@@ -165,7 +174,11 @@ for i in factory_elem_list:
 # print(factory_elem_str_list)
 # print(len(factory_elem_str_list))
 
+# Clean out empty str's from list
+
 factory_elem_str_list = ' '.join(factory_elem_str_list).split()
+
+# Loop through list of str's, remove encoding characters, and coerce to float
 
 factory_elem_float_list = []
 for i in factory_elem_str_list:
@@ -175,12 +188,16 @@ for i in factory_elem_str_list:
 # print(factory_elem_float_list)
 # print(len(factory_elem_float_list))
 
+# Loop through list of floats and coerce to rounded up ints
+
 factory_elem_int_list = []
 for i in factory_elem_float_list:
     factory_elem_int_list.append(int(math.ceil(i)))
 # print("factory_elem_int_list is:")
 # print(factory_elem_int_list)
 # print(len(factory_elem_int_list))
+
+# Loop through list of str's, remove encoding characters, and coerce to float
 
 rate_float_list = []
 for i in rates_innerHTML_list:
@@ -189,6 +206,8 @@ for i in rates_innerHTML_list:
 # print("rate_float_list is:")
 # print(rate_float_list)
 # print(len(rate_float_list))
+
+# Loop through lists of WebElements and create lists of img alt text (str's)
 
 factory_img_elem_alt_text_list = []
 for i in factory_img_elem_list:
@@ -204,9 +223,13 @@ for i in item_img_elem_list:
 # print(item_img_elem_alt_text_list)
 # print(len(item_img_elem_alt_text_list))
 
+# Create an empty dictionary and use it to add the keys to the actual dictionary
+
 empty_dict = {}
 item_dict = empty_dict.fromkeys(item_img_elem_alt_text_list)
 # print(item_dict)
+
+# Add values to dictionary from various lists
 
 for a, b, c, d in zip(item_img_elem_alt_text_list, factory_img_elem_alt_text_list, factory_elem_float_list, rate_float_list):
     item_dict[a] = [b, c, d]
@@ -216,6 +239,10 @@ if 'crude-oil' in item_dict:
     item_dict.pop('crude-oil')
 # Removing the last key because a value is not generated for crude oil
 # Later on this could be item_dict['crude-oil'] = {rate of crude oil needed} once I add in the rates needed for each recipe
+
+# Loop through dictionary and print desired output to user
+    # TEMPLATE: "You will need {number_of_factories} {name_of_factories}'s making {item_name} at rate of {rate} items per minute"
+    #           "You will need {total_number_of_factories} factories in total to make {desired_item}"
 
 for i in item_dict:
     print(f"You will need {item_dict.get(i)[1]} {item_dict.get(i)[0]}'s making {i} at a rate of {item_dict.get(i)[2]} items per minute")
