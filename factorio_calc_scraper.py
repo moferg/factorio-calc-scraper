@@ -36,25 +36,25 @@ import mechanicalsoup
 import time
 import math
 
-# print("Welcome to the Factorio Calc Scraper!")
-# time.sleep(1)
-# print("This script will scrape the site of the Factorio Calculator to calculate how many factories you need in total for a recipe.")
-# time.sleep(2)
-# print("All you have to do is answer the following prompts.")
-# time.sleep(2)
+print("Welcome to the Factorio Calc Scraper!")
+time.sleep(1)
+print("This script will scrape the site of the Factorio Calculator to calculate how many factories you need in total for a recipe.")
+time.sleep(2)
+print("All you have to do is answer the following prompts.")
+time.sleep(2)
 
-# item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
-item_input = "space-science-pack"
-# factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
-factories_or_rate = "factories"
-factories_input = "1"
-rate_input = "3000"
-# if factories_or_rate == "factories":
-#     factories_input = input("How many factories will be making the item?     ")
-# elif factories_or_rate == "rate":
-#     rate_input = input("At what rate do you want to make the item? (in items per minute)     ")
-# else:
-#     print("")
+item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
+# item_input = "space-science-pack"
+factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
+# factories_or_rate = "factories"
+# factories_input = "1"
+# rate_input = "3000"
+if factories_or_rate == "factories":
+    factories_input = input("How many factories will be making the item?     ")
+elif factories_or_rate == "rate":
+    rate_input = input("At what rate do you want to make the item? (in items per minute)     ")
+else:
+    print("")
 
 # TODO: (DONE) Request web page
 
@@ -175,6 +175,21 @@ for i in factory_elem_str_list:
 # print(factory_elem_float_list)
 # print(len(factory_elem_float_list))
 
+factory_elem_int_list = []
+for i in factory_elem_float_list:
+    factory_elem_int_list.append(int(math.ceil(i)))
+# print("factory_elem_int_list is:")
+# print(factory_elem_int_list)
+# print(len(factory_elem_int_list))
+
+rate_float_list = []
+for i in rates_innerHTML_list:
+    i = i.rstrip("&nbsp;")
+    rate_float_list.append(float(i))
+# print("rate_float_list is:")
+# print(rate_float_list)
+# print(len(rate_float_list))
+
 factory_img_elem_alt_text_list = []
 for i in factory_img_elem_list:
     factory_img_elem_alt_text_list.append(i.get_attribute("alt"))
@@ -193,17 +208,18 @@ empty_dict = {}
 item_dict = empty_dict.fromkeys(item_img_elem_alt_text_list)
 # print(item_dict)
 
-for a, b, c, d in zip(item_img_elem_alt_text_list, factory_img_elem_alt_text_list, factory_elem_float_list, rates_innerHTML_list):
+for a, b, c, d in zip(item_img_elem_alt_text_list, factory_img_elem_alt_text_list, factory_elem_float_list, rate_float_list):
     item_dict[a] = [b, c, d]
 # print(item_dict)
 
-item_dict.pop('crude-oil')
+if 'crude-oil' in item_dict:
+    item_dict.pop('crude-oil')
 # Removing the last key because a value is not generated for crude oil
 # Later on this could be item_dict['crude-oil'] = {rate of crude oil needed} once I add in the rates needed for each recipe
 
 for i in item_dict:
     print(f"You will need {item_dict.get(i)[1]} {item_dict.get(i)[0]}'s making {i} at a rate of {item_dict.get(i)[2]} items per minute")
-print(f"You will need {math.ceil(sum(factory_elem_float_list))} factories in total to make {item_input}")
+print(f"You will need {sum(factory_elem_int_list)} factories in total to make {item_input}")
 
 # TODO: (DONE) Clean up output
 # Format - "You will need {num_of_assemblers} to create {item}" repeat for item and each subitem and then "You will need a total of {tot_num_of_assemblers}"
@@ -218,4 +234,5 @@ print(f"You will need {math.ceil(sum(factory_elem_float_list))} factories in tot
     # Step 4: Oil Refineries
 # TODO: Feature - ouput includes how much power each subrecipe will take and how much power the recipe will take in total
 # TODO: Feature - ouput includes how many belts of each material each subrecipe needs and how many belts of the item will be produced
-# TODO: Feature - output includes rate at which each subitem will be made in order to supply recipe for main item
+# TODO: (DONE) Feature - output includes rate at which each subitem will be made in order to supply recipe for main item
+# TODO: Add crude oil into output
