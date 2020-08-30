@@ -134,10 +134,10 @@ else:
     # Figure out how to loop through all the XPaths and put the WebElements in a list
     # Figure out how to extract the text from the html of a list of WebElements 
 
-all_rates_list = []
-all_rates_list.extend(driver.find_elements_by_xpath("//div[@id='totals_tab']/table[@id='totals']/tr/td[2]/tt"))
-# print(all_rates_list)
-# print(len(all_rates_list))
+rates_elem_list = []
+rates_elem_list.extend(driver.find_elements_by_xpath("//table[@id='totals']/tr/td[2]/tt"))
+# print(all_rates_elem_list)
+# print(len(all_rates_elem_list))
 factory_elem_list = []
 factory_elem_list.extend(driver.find_elements_by_xpath("//td[@class='factory right-align'][1]/tt"))
 # print(factory_elem_list)
@@ -150,16 +150,13 @@ item_img_elem_list = []
 item_img_elem_list.extend(driver.find_elements_by_xpath("//td[@class='right-align']/img"))
 # print(item_img_elem_list)
 # print(len(item_img_elem_list))
-rate_elem_list = []
-rate_elem_list.extend(driver.find_elements_by_xpath("//td[@class='right-align pad-right'][2]/tt"))
 
-
-all_rates_list_innerHTML = []
-for i in all_rates_list:
-    all_rates_list_innerHTML.append(i.get_attribute("innerHTML"))
-print("all_rates_list_innerHTML is:")
-print(all_rates_list_innerHTML)
-print(len(all_rates_list_innerHTML))
+rates_innerHTML_list = []
+for i in rates_elem_list:
+    rates_innerHTML_list.append(i.get_attribute("innerHTML"))
+# print("rates_innerHTML_list is:")
+# print(rates_innerHTML_list)
+# print(len(rates_innerHTML_list))
 
 factory_elem_str_list = []
 for i in factory_elem_list:
@@ -196,8 +193,8 @@ empty_dict = {}
 item_dict = empty_dict.fromkeys(item_img_elem_alt_text_list)
 # print(item_dict)
 
-for x, y, z in zip(item_img_elem_alt_text_list, factory_img_elem_alt_text_list, factory_elem_float_list):
-    item_dict[x] = [y, z]
+for a, b, c, d in zip(item_img_elem_alt_text_list, factory_img_elem_alt_text_list, factory_elem_float_list, rates_innerHTML_list):
+    item_dict[a] = [b, c, d]
 # print(item_dict)
 
 item_dict.pop('crude-oil')
@@ -205,7 +202,7 @@ item_dict.pop('crude-oil')
 # Later on this could be item_dict['crude-oil'] = {rate of crude oil needed} once I add in the rates needed for each recipe
 
 for i in item_dict:
-    print(f"You will need {item_dict.get(i)[1]} {item_dict.get(i)[0]} to make {i}")
+    print(f"You will need {item_dict.get(i)[1]} {item_dict.get(i)[0]}'s making {i} at a rate of {item_dict.get(i)[2]} items per minute")
 print(f"You will need {math.ceil(sum(factory_elem_float_list))} factories in total to make {item_input}")
 
 # TODO: (DONE) Clean up output
