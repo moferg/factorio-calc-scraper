@@ -36,25 +36,25 @@ import mechanicalsoup
 import time
 import math
 
-print("Welcome to the Factorio Calc Scraper!")
-time.sleep(1)
-print("This script will scrape the site of the Factorio Calculator to calculate how many factories you need in total for a recipe.")
-time.sleep(2)
-print("All you have to do is answer the following prompts.")
-time.sleep(2)
+# print("Welcome to the Factorio Calc Scraper!")
+# time.sleep(1)
+# print("This script will scrape the site of the Factorio Calculator to calculate how many factories you need in total for a recipe.")
+# time.sleep(2)
+# print("All you have to do is answer the following prompts.")
+# time.sleep(2)
 
-item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
-# item_input = "space-science-pack"
-factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
-# factories_or_rate = "factories"
-# factories_input = "1"
-# rate_input = "3000"
-if factories_or_rate == "factories":
-    factories_input = input("How many factories will be making the item?     ")
-elif factories_or_rate == "rate":
-    rate_input = input("At what rate do you want to make the item? (in items per minute)     ")
-else:
-    print("")
+# item_input = input("What item do you want to make? (If multiple words, must be in following syntax: word1-word2)    ") 
+item_input = "space-science-pack"
+# factories_or_rate = input("Would you like to go by number of factories or rate of item per minute? (factories or rate)     ")
+factories_or_rate = "factories"
+factories_input = "1"
+rate_input = "3000"
+# if factories_or_rate == "factories":
+#     factories_input = input("How many factories will be making the item?     ")
+# elif factories_or_rate == "rate":
+#     rate_input = input("At what rate do you want to make the item? (in items per minute)     ")
+# else:
+#     print("")
 
 # TODO: (DONE) Request web page
 
@@ -134,6 +134,10 @@ else:
     # Figure out how to loop through all the XPaths and put the WebElements in a list
     # Figure out how to extract the text from the html of a list of WebElements 
 
+all_rates_list = []
+all_rates_list.extend(driver.find_elements_by_xpath("//div[@id='totals_tab']/table[@id='totals']/tr/td[2]/tt"))
+# print(all_rates_list)
+# print(len(all_rates_list))
 factory_elem_list = []
 factory_elem_list.extend(driver.find_elements_by_xpath("//td[@class='factory right-align'][1]/tt"))
 # print(factory_elem_list)
@@ -146,6 +150,16 @@ item_img_elem_list = []
 item_img_elem_list.extend(driver.find_elements_by_xpath("//td[@class='right-align']/img"))
 # print(item_img_elem_list)
 # print(len(item_img_elem_list))
+rate_elem_list = []
+rate_elem_list.extend(driver.find_elements_by_xpath("//td[@class='right-align pad-right'][2]/tt"))
+
+
+all_rates_list_innerHTML = []
+for i in all_rates_list:
+    all_rates_list_innerHTML.append(i.get_attribute("innerHTML"))
+print("all_rates_list_innerHTML is:")
+print(all_rates_list_innerHTML)
+print(len(all_rates_list_innerHTML))
 
 factory_elem_str_list = []
 for i in factory_elem_list:
@@ -207,3 +221,4 @@ print(f"You will need {math.ceil(sum(factory_elem_float_list))} factories in tot
     # Step 4: Oil Refineries
 # TODO: Feature - ouput includes how much power each subrecipe will take and how much power the recipe will take in total
 # TODO: Feature - ouput includes how many belts of each material each subrecipe needs and how many belts of the item will be produced
+# TODO: Feature - output includes rate at which each subitem will be made in order to supply recipe for main item
