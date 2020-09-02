@@ -235,17 +235,23 @@ for a, b, c, d in zip(item_img_elem_alt_text_list, factory_img_elem_alt_text_lis
     item_dict[a] = [b, c, d]
 # print(item_dict)
 
-if 'crude-oil' in item_dict:
-    item_dict.pop('crude-oil')
-# Removing the last key because a value is not generated for crude oil
-# Later on this could be item_dict['crude-oil'] = {rate of crude oil needed} once I add in the rates needed for each recipe
-
 # Loop through dictionary and print desired output to user
     # TEMPLATE: "You will need {number_of_factories} {name_of_factories}'s making {item_name} at rate of {rate} items per minute"
     #           "You will need {total_number_of_factories} factories in total to make {desired_item}"
 
+oil_in_dict = False
+
+if 'crude-oil' in item_dict:
+    oil_in_dict = True
+    oil_rate = rate_float_list[-1]
+    item_dict.pop('crude-oil')
+
+driver.quit()
+
 for i in item_dict:
     print(f"You will need {item_dict.get(i)[1]} {item_dict.get(i)[0]}'s making {i} at a rate of {item_dict.get(i)[2]} items per minute")
+if oil_in_dict:
+    print(f"You will need to produce crude-oil at a rate of {oil_rate} items per minute")
 print(f"You will need {sum(factory_elem_int_list)} factories in total to make {item_input}")
 
 # TODO: (DONE) Clean up output
